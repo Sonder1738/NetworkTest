@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.Socket;
 
 
-//http://mrbool.com/file-transfer-between-2-computers-with-java/24516   as222aaaaasd
+//http://mrbool.com/file-transfer-between-2-computers-with-java/24516   as222whataasd
 public class Client {
 
 	public static void main(String[] args) throws IOException{
