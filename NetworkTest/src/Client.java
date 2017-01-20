@@ -8,7 +8,7 @@ import java.net.Socket;
 
 
 //http://mrbool.com/file-transfer-between-2-computers-with-java/24516
-
+//works
 public class Client {
 
 	public static void main(String[] args) throws IOException{
