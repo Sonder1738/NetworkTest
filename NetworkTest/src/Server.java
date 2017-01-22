@@ -9,87 +9,82 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Server {
+public class Server implements Runnable{
 
-	static Socket serverSocket = null;
 	
-	public static void main(String[] args) throws IOException{
+	ServerSocket ssock;
+    int portIn = 15676;
+    private Thread t;
+    Socket client;
+	
+	Thread server;
+
+
+	
+	protected void serverIn()
+    {
+		try
+        {
+            while (true){
+            	System.out.println("Server listening..");
+            	ssock = new ServerSocket(portIn);
+                client = ssock.accept();
+                System.out.println(client.getInetAddress().getHostAddress() +" connected ");
+                
+                PrintWriter out = new PrintWriter(client.getOutputStream(),true);
+                BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                String line;
+                int time =0;
+                while((line=input.readLine())!=null){ 
+                  System.out.println("Client :"+line);
+                  time++;
+                  if(time==50){
+                	  break;
+                  }
+                  }
+                
+            }
+        }
+        catch(IOException e)
+        {
+            System.out.println(e);
+            System.out.println(client.getInetAddress().getHostAddress()+" Disconnected");
+        }
+    }
+	
+
+
+	
+	public void run(){
 		
-		start();
-		
+		serverIn();
 		}
 	
-	public static void start() throws IOException{
-		Scanner in = new Scanner(System.in);
+public void start() {
 		
-		System.out.println("Press 1 to start server");
-		System.out.println("Press 2 to end server");
-		System.out.println("Press 3 to start chatting");
-		System.out.println("Please select number");
+		System.out.println("Starting Server Thread");
+	      if (t == null) {
+	         t = new Thread (this, "svr thrd");
+	         t.start ();
+	      }
 		
-		int choice;
-		choice = in.nextInt();
-		
-		switch (choice){
-		
-		case 1: startsvr();
-		break;
-		case 2: closesvr();
-		break;
-		case 3: startchat();
-		break;
-		default : System.out.println("You entered something else");
-		
-		}
-		
-	}
-	
-	public static void startsvr(){
-		ServerSocket MyService = null;
-		
-	    try {
-	    	System.out.println("This server is waiting for connection");
-	    	MyService = new ServerSocket(15676);
-	        }
-	        catch (IOException e) {
-	           System.out.println(e);
-	           
-	        }
-	    
-	    
-	    try {
-	    	serverSocket = MyService.accept();
-	    	System.out.println("Connection successful");
-	    	System.out.println("Client connected with IP: "+serverSocket.getInetAddress().getHostAddress());
-	    	
-	    	start();
-	    }catch (IOException e) {
-	       System.out.println(e);
-	    }
 	}
 
-	public static void closesvr() throws IOException{
-		serverSocket.close();
-	}
-	public static void startchat() throws IOException{
+
+	
 		
-		BufferedReader cin=new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-		PrintStream cout=new PrintStream(serverSocket.getOutputStream());
-		BufferedReader stdin=new BufferedReader(new InputStreamReader(System.in));
-		String s;
-		while (  true )
-		{
-			
-			s=cin.readLine();
-  			if (s.equalsIgnoreCase("END"))
-  			{
-				cout.println("BYE");
-    				break;
-  			  }
-			System. out.print("Client : "+s+"\n");
-			System.out.print("Server : ");
-			s=stdin.readLine();
-			cout.println(s);
-		}
-	}
+		
 }
+class serverOut extends Thread{
+	
+}
+class serverIn extends Thread{
+	
+}
+
+
+
+
+
+
+
