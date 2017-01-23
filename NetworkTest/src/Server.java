@@ -1,4 +1,5 @@
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,22 +13,32 @@ public class Server {
 		
 		
 
-		
 		ServerSocket MyService = null;
 		
-		try {
-			MyService = new ServerSocket(15678);
-		}catch (IOException e){
-			//do nothing
+
+	    try {
+	    	System.out.println("This server laptop is running");
+	    	MyService = new ServerSocket(15676);
+	        }
+	        catch (IOException e) {
+	           System.out.println(e);
+	           
+	        }
+		
+		Socket clientSocket = null;
+	    try {
+	    	clientSocket = MyService.accept();
+	    	System.out.println("accepted.connected");
+	    	clientSocket.close();
+	        }
+	    catch (IOException e) {
+	       System.out.println(e);
+	    }
+	    
+	    
+	    
+	    
 		}
 
-		Socket clientSocket = null;
-		try {
-			clientSocket = MyService.accept();
-			System.out.println("Accepted");
-		}catch (IOException e){
-			
-		}
-	}
 
 }
