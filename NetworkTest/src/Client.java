@@ -17,14 +17,18 @@ import java.net.UnknownHostException;
 
 class Client implements Runnable{
 	private Thread t;
-	int portOut = 15678;
+	int portOut = 15676;
 	Socket MyClient;
 	
+	
+	//TESTING PURPOSES ONLY
+	//192.168.0.7 for LAN
+	//128.0.0.1 for LOCAL PC
 	
 	protected void clientIn() throws IOException{
 		
 		try{
-			MyClient = new Socket("127.0.0.1", portOut);
+			MyClient = new Socket("192.168.0.7", portOut);
 		}catch(Exception e){
 			System.out.println("No server available");
 		}
