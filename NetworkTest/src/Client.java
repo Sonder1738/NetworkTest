@@ -14,79 +14,60 @@ import java.net.UnknownHostException;
 
 //http://mrbool.com/file-transfer-between-2-computers-with-java/24516
 
-public class Client{
-	
-	int portOut = 15678;
-	
-	Client() throws IOException{
-			
-		try{
-			System.out.println("Connecting..");
-			Thread.sleep(1000);
-			clientIn ci = new clientIn();
-			ci.clientIn();
-			
-		}catch(Exception e){
-			System.out.println("No server online");
-			
-		}
-			
-	   
-	   }
 
-	public void start() throws UnknownHostException, IOException {
-		clientIn ci = new clientIn();
-		ci.clientIn();
-		
-	}
-
-}
-
-class clientOut extends Thread{
-	
-	
-	
-	public void clientOut(String msgIn, Socket a) throws UnknownHostException, IOException{
-		
-		PrintStream out=new PrintStream(a.getOutputStream());
-		try{
-			//does get input
-			out.println(msgIn);
-		}catch (Exception e){
-			System.out.println(e);
-		}
-	}
-
-	
-}
-
-class clientIn extends Thread{
-	
+class Client implements Runnable{
+	private Thread t;
 	int portOut = 15678;
 	Socket MyClient;
-	public void clientIn () throws UnknownHostException, IOException{
+	
+	
+	protected void clientIn() throws IOException{
 		
-		MyClient = new Socket("127.0.0.1", portOut);
+		try{
+			MyClient = new Socket("127.0.0.1", portOut);
+		}catch(Exception e){
+			System.out.println("No server available");
+		}
 		System.out.println("Connected to "+MyClient.getInetAddress().getHostAddress());
-		
+		PrintStream out=new PrintStream(MyClient.getOutputStream());
 		BufferedReader stdin=new BufferedReader(new InputStreamReader(System.in));
 		String s;
 		while (  true )
 		{
-			System.out.print("Client : ");
+			//System.out.print("Client : ");
 			s=stdin.readLine();
 			
-			clientOut co = new clientOut();
-			co.clientOut(s, MyClient);
+			out.println(s);
 			
-			if ( s.equalsIgnoreCase("BYE") )
- 			   break;
+			if(s.equalsIgnoreCase("BYE")){
+				System.out.println("A"); //server is still running thats why it doesnt end
+				break;
+			}
+				
 		}
 	   }
+	public void run(){
+		try {
+			clientIn();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	
+	public void start() {
+		System.out.println("Connecting..");
+	      if (t == null) {
+	         t = new Thread (this, "svr thrd");
+	         t.start ();
+	      }
+		
+	}
 }
 
 
 /*
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -98,8 +79,12 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+
 //http://mrbool.com/file-transfer-between-2-computers-with-java/24516
+
 public class Client {
+
 	public static void main(String[] args) throws IOException{
 			System.out.println("Starting server..");
 			Server run = new Server();
@@ -135,4 +120,7 @@ public class Client {
 	}
 	
 }
+
 */
+
+
