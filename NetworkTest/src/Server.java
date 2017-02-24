@@ -13,10 +13,10 @@ public class Server implements Runnable{
 
 	
 	ServerSocket ssock;
-    int portIn = 15678;
+    int portIn = 15676;
     private Thread t;
     Socket client;
-	boolean isRunning=false;
+	
 	Thread server;
 
 
@@ -27,29 +27,22 @@ public class Server implements Runnable{
         {
             while (true){
             	System.out.println("Server listening..");
-            	if(isRunning!=true){
             	ssock = new ServerSocket(portIn);
-            	isRunning=true;
-            	}
-            	
                 client = ssock.accept();
                 System.out.println(client.getInetAddress().getHostAddress() +" connected ");
                 
                 PrintWriter out = new PrintWriter(client.getOutputStream(),true);
                 BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 String line;
-                
-                while(true){
-                	line=input.readLine();
-                	
-                	System.out.println(client.getInetAddress().getHostAddress()+" : "+line);
-                	if(line.equalsIgnoreCase("BYE")){
-                		System.out.println(client.getInetAddress().getHostName()+" disconnected");
-                		break;
-                	}
-                  
+                int time =0;
+                while((line=input.readLine())!=null){ 
+                  System.out.println("Client :"+line);
+                  time++;
+                  if(time==50){
+                	  break;
                   }
-               
+                  }
+                
             }
         }
         catch(IOException e)
@@ -63,8 +56,8 @@ public class Server implements Runnable{
 
 	
 	public void run(){
-		serverIn();
 		
+		serverIn();
 		}
 	
 public void start() {
@@ -88,10 +81,4 @@ class serverOut extends Thread{
 class serverIn extends Thread{
 	
 }
-
-
-
-
-
-
 
