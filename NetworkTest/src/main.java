@@ -5,10 +5,9 @@ public class main {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		
-		Thread a = new Thread();
 		Server s = new Server();
 		s.start();
-		Thread.sleep(10000);
+		Thread.sleep(5000);
 		Client c = new Client();
 		c.start();
 		
