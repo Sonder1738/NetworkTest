@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -33,22 +34,31 @@ public class Server implements Runnable{
             	}
             	
                 client = ssock.accept();
-                System.out.println(client.getInetAddress().getHostAddress() +" connected ");
+                if(client.getInetAddress().getHostAddress().equals(InetAddress.getLocalHost().getHostAddress())){
+            		System.out.println("CON TO ITSELF");
+            		client.close();
+            	}else{
+            		
+            		System.out.println(client.getInetAddress().getHostAddress() +" connected ");
+                    
+                    PrintWriter out = new PrintWriter(client.getOutputStream(),true);
+                    BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                    String line;
+                    
+                    while(true){
+                    	line=input.readLine();
+                    	
+                    	System.out.println(client.getInetAddress().getHostAddress()+" : "+line);
+                    	if(line.equalsIgnoreCase("BYE")){
+                    		System.out.println(client.getInetAddress().getHostName()+" disconnected");
+                    		break;
+                    	}
+                      
+                      }
+            	}
                 
-                PrintWriter out = new PrintWriter(client.getOutputStream(),true);
-                BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                String line;
                 
-                while(true){
-                	line=input.readLine();
-                	
-                	System.out.println(client.getInetAddress().getHostAddress()+" : "+line);
-                	if(line.equalsIgnoreCase("BYE")){
-                		System.out.println(client.getInetAddress().getHostName()+" disconnected");
-                		break;
-                	}
-                  
-                  }
+                
                
             }
         }
